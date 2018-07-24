@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Microsoft Azure</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<h1>Hello, from Nishant Thakur</h1>
+<h2>Student ID: 1001544591</h2>
+<!-- 
+<h2>Upload CSV file to Azure SQL Database</h2>
+<form id="csvUpload" action="{{ script_root }}/uploader" method="post" enctype = "multipart/form-data">
+	<input type = "file" name = "file" />
+	<input type = "submit"/>
+</form>
+ -->
+<h2>Search with magnitude</h2>
+<form id="searchMagnitude" action = "" method = "POST">
+	<p>Mangnitude > <input type = "text" name = "searchWord" /></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+<h2>Search with magnitude range in small intervals</h2>
+<form id="searchMagnitudeIntervals" action = "" method = "POST">
+	<p>Magnitude Range: <input type = "text" name = "range1" value="0"/> - <input type = "text" name = "range2" value="10"/> </p>
+	<p>Count: <input type = "text" name = "count" value="0"/></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+<h2>Search with magnitude and Date Range</h2>
+<form id="searchMagnitudeRange" action = "" method = "POST">
+	<p>Magnitude Range: <input type = "text" name = "range1" value="0"/> - <input type = "text" name = "range2" value="10"/> </p>
+	<p>Start Date: <input type="date" name="startDate"></p>
+	<p>End Date: <input type="date" name="endDate"></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+<h2>Search with Location name</h2>
+<form id="searchLocationName" action = "" method = "POST">
+	<p>Magnitude Range: <input type = "text" name = "range1" value="0"/> - <input type = "text" name = "range2" value="10"/> </p>
+	<p>Name: <input type="text" name="name"></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+<h2>Search with Location</h2>
+<form id="searchLocation" action = "" method = "POST">
+	<p>Latitude: <input type = "text" name = "latitude" value="0"/></p>
+	<p>Longitude: <input type = "text" name = "longitude" value="0"/></p>
+	<p>Distance: <input type = "text" name = "distance" value="0"/></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+<h2>Search around Location with distance</h2>
+<form id="searchLocationDistance" action = "" method = "POST">
+	<p>Latitude: <input type = "text" name = "latitude" value="0"/></p>
+	<p>Longitude: <input type = "text" name = "longitude" value="0"/></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+<h2>Search with Location Range</h2>
+<form id="searchLocationRange" action = "" method = "POST">
+	<p>Latitude: <input type = "text" name = "latitude1" value="0"/></p>
+	<p>Longitude: <input type = "text" name = "longitude1" value="0"/></p>
+	<p>Latitude: <input type = "text" name = "latitude2" value="0"/></p>
+	<p>Longitude: <input type = "text" name = "longitude2" value="0"/></p>
+	<p><input type = "submit" value = "submit" /></p>
+</form>
+<br/>
+
+
+
+<h2>Search Result:</h2>
+<div id="searchResults">
+	<p class="jqrow"></p>
+</div>
+<br/>
+
+<script>
+	
+	$("#searchMagnitude").submit(function(e) {
+		let url = "{{ script_root }}/searchMagnitude"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				console.log(data); // show response
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {	
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);			
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+	$("#searchMagnitudeIntervals").submit(function(e) {
+		let url = "{{ script_root }}/searchMagnitudeIntervals"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+	$("#searchMagnitudeRange").submit(function(e) {
+		let url = "{{ script_root }}/searchMagnitudeRange"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				console.log(data); // show response
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {	
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);			
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+
+	$("#searchLocationName").submit(function(e) {
+		let url = "{{ script_root }}/searchLocationName"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				console.log(data); // show response
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {	
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);			
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+
+	$("#searchLocation").submit(function(e) {
+		let url = "{{ script_root }}/searchLocation"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				console.log(data); // show response
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {	
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);			
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+	$("#searchLocationDistance").submit(function(e) {
+		let url = "{{ script_root }}/searchLocationDistance"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				console.log(data); // show response
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {	
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);			
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+	$("#searchLocationRange").submit(function(e) {
+		let url = "{{ script_root }}/searchLocationRange"; // the script where you handle the form input.
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: $(this).serialize(), // serializes the form's elements.
+			success: function(data)
+			{
+				console.log(data); // show response
+				$("#searchResults").empty();
+				console.log(data.length);
+				$('#searchResults').append('<p class="jqrow"> Result Count: '+ data.length +' </p>');	
+				$(function() {
+					$.each(data, function(i, item) {	
+						var $drow = '<p class="jqrow">'+JSON.stringify(item)+'</p>'; 
+						$('#searchResults').append($drow);			
+					});
+				});
+			}
+		});
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
+
+</script>
+</body>
+</html>

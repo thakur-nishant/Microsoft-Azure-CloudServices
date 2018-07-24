@@ -1,0 +1,3 @@
+Flask==0.12.1
+pypyodbc==1.3.4.3
+redis==2.10.6
